@@ -31,6 +31,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            nest-cli.json
+            tsconfig.json
 
       # 3) Instalar dependencias con cache funcional
       - name: 📥 Install dependencies
