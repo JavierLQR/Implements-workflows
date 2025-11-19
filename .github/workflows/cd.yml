@@ -39,3 +39,43 @@ jobs:
       # 5. Build del backend (si tu deploy lo necesita)
       - name: 🏗️ Build
         run: pnpm build
+
+        # 6. Empaquetar build y copiar los archivos necesarios para deploy
+      - name: 📦 Prepare artifact
+        run: |
+          mkdir deploy
+          cp -r dist deploy/dist
+          cp package.json deploy/package.json
+          cp pnpm-lock.yaml deploy/pnpm-lock.yaml
+
+      # Aqui irían los pasos para subir al servidor y ejecutar comandos remotos
+      #  (estos pasos dependen de tu infraestructura y no están implementados)
+      #  Ejemplo usando SCP y SSH con llaves almacenadas en Secrets de GitHub
+
+      # 6️⃣ Subir al servidor (VPS, Droplet, EC2)
+      # - name: 🚀 Upload files to server
+      #   uses: appleboy/scp-action@v0.1.7
+      #   with:
+      #     host: ${{ secrets.DEPLOY_HOST }}
+      #     username: ${{ secrets.DEPLOY_USER }}
+      #     key: ${{ secrets.DEPLOY_SSH_KEY }}
+      #     source: "deploy/*"
+      #     target: "/var/www/app"
+
+      # # 7️⃣ Ejecutar comandos en servidor
+      # - name: 🛠️ Run deploy tasks on server
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ secrets.DEPLOY_HOST }}
+      #     username: ${{ secrets.DEPLOY_USER }}
+      #     key: ${{ secrets.DEPLOY_SSH_KEY }}
+      #     script: |
+      #       cd /var/www/app
+
+      #       echo "📥 Updating dependencies"
+      #       pnpm install --prod --frozen-lockfile
+
+      #       echo "🔄 Restarting PM2"
+      #       pm2 reload ecosystem.config.js --update-env
+
+      #       echo "✅ Deploy complete"
