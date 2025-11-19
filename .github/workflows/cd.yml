@@ -18,27 +18,19 @@ jobs:
       - name: 🧾 Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Setup Node (por si el deploy ejecuta scripts)
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      # 2 Instalar PNPM (antes de usar el caché)
+      # 2. Setup PNPM
       - name: 📦 Setup PNPM v10.19.0
         uses: pnpm/action-setup@v4
         with:
           version: 10.19.0
           run_install: false
 
-      # 3️⃣ Configurar caché manualmente (según lockfile)
-      - name: ⚙️ Setup pnpm store cache
-        uses: actions/cache@v4
+      # 3. Setup Node.js con cache de PNPM
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
 
       # 4. Instalar dependencias (si build es necesario para despliegue)
       - name: 📥 Install dependencies
